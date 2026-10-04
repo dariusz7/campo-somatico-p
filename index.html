@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>v1 Campo Somático Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: phone-width story deck, one full screen per idea, tap right to advance, tap left to go back. Brand palette from the original deck, light only by choice. */
+:root{
+  --cream:#F5EFE3;
+  --paper:#FAF6EE;
+  --ink:#2E2622;
+  --muted:#6E625A;
+  --line:#E3D6C3;
+  --terra:#B65B3A;
+  --terra-deep:#8B3F2A;
+  --sage:#7F8C6A;
+  --forest:#4D5A43;
+  --mustard:#D3982F;
+  --plum:#6B4A5E;
+  --peach-card:#F0D6C7;
+  --sage-card:#DDE3D0;
+  --mustard-card:#F2E0BA;
+  --sand:#F2E2C0;
+  --desk:#E9E0D0;
+  --display:"Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --body:"Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+html{height:100%;box-sizing:border-box;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{height:100%;margin:0;background:var(--desk);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent;overflow:hidden}
+.stage{height:100%;display:grid;place-items:center}
+.deck{position:relative;width:100%;max-width:440px;height:100%;max-height:900px;overflow:hidden;background:var(--cream);user-select:none;-webkit-user-select:none;cursor:pointer}
+@media (min-width:600px){.deck{border-radius:28px;box-shadow:0 20px 60px rgba(46,38,34,.18);height:calc(100% - 40px)}}
+
+/* progress */
+.progress{position:absolute;z-index:5;top:12px;left:16px;right:16px;display:flex;gap:3px;pointer-events:none}
+.progress span{flex:1;height:3px;border-radius:2px;background:rgba(46,38,34,.14);overflow:hidden}
+.progress span i{display:block;height:100%;width:0;background:var(--terra);transition:width .3s ease}
+.progress span.done i{width:100%}
+.deck.dark .progress span{background:rgba(245,239,227,.22)}
+.deck.dark .progress span i{background:var(--sand)}
+
+/* slides */
+.slide{position:absolute;inset:0;display:none;flex-direction:column;padding:44px 24px 20px;overflow-y:auto;overflow-x:hidden;background:var(--cream)}
+.slide.active{display:flex}
+.slide.active .body{animation:rise .45s ease both}
+@keyframes rise{from{opacity:.0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.slide.active .body{animation:none}.progress span i{transition:none}}
+.body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;position:relative;z-index:2;min-width:0}
+.body.bottom{justify-content:flex-end}
+.foot{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;font-size:.75rem;color:var(--muted)}
+.foot .brand{font-family:var(--display);font-style:italic;font-size:.85rem;color:var(--ink)}
+.foot .num{letter-spacing:.08em;font-variant-numeric:tabular-nums}
+
+.slide.terra{background:var(--terra-deep);color:var(--cream)}
+.slide.forest{background:var(--forest);color:var(--cream)}
+.slide.terra .foot,.slide.forest .foot{color:rgba(245,239,227,.7)}
+.slide.terra .foot .brand,.slide.forest .foot .brand{color:var(--cream)}
+
+/* type */
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);margin:0}
+.terra .eyebrow,.forest .eyebrow{color:var(--sand)}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.015em}
+h1{font-size:clamp(3.4rem,17vw,4.6rem);line-height:.95}
+h2{font-size:clamp(2.05rem,9.6vw,2.6rem);line-height:1.05}
+h3{font-size:1.35rem;line-height:1.15}
+h1 em,h2 em{font-style:italic;color:var(--terra)}
+.terra h2 em,.forest h2 em{color:var(--sand)}
+p{margin:0}
+.lead{font-family:var(--display);font-size:1.28rem;line-height:1.35;font-weight:500}
+.text{color:var(--muted);font-size:1rem;max-width:34em}
+.terra .text,.forest .text{color:rgba(245,239,227,.85)}
+.small{font-size:.85rem;color:var(--muted)}
+.terra .small,.forest .small{color:rgba(245,239,227,.72)}
+.quote{font-family:var(--display);font-style:italic;font-size:1.2rem;line-height:1.3;color:var(--forest)}
+.tagline{font-family:var(--display);font-style:italic;font-weight:500;font-size:1.3rem;color:var(--forest)}
+
+/* rings */
+.rings{position:absolute;z-index:1;pointer-events:none;border-radius:50%}
+.rings span{position:absolute;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}
+.cover-rings{width:520px;height:520px;top:-210px;right:-210px}
+.dot{position:absolute;border-radius:50%;z-index:1;pointer-events:none}
+.end-rings{width:460px;height:460px;top:-200px;right:-230px}
+
+/* cover */
+.cover-meta{display:flex;gap:18px;font-size:.8rem;color:var(--muted);margin-top:8px}
+.cover-meta b{color:var(--ink);font-weight:600;letter-spacing:.02em}
+.hint{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--terra);font-weight:500;margin-top:6px}
+.hint i{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--terra);display:grid;place-items:center;font-style:normal;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.hint i{animation:none}}
+
+/* pillars */
+.pillars{display:flex;flex-direction:column;gap:10px}
+.pillar{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:16px}
+.pillar .n{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--paper);font-family:var(--display);font-size:1rem}
+.pillar h3{font-size:1.15rem;margin-bottom:2px}
+.pillar p{font-size:.88rem;color:var(--muted);line-height:1.4}
+
+/* areas overview */
+.areas{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.area-row{position:relative;display:flex;gap:12px;align-items:baseline;padding:9px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+.area-row .k{font-family:var(--display);font-style:italic;color:var(--mustard);font-size:.95rem;width:22px;flex:none}
+.area-row b{font-family:var(--display);font-weight:500;font-size:1.02rem;display:block;line-height:1.2}
+.area-row small{font-size:.8rem;color:var(--muted)}
+.area-row.first{border:1.5px solid var(--terra)}
+.badge{display:inline-block;font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:var(--terra);color:var(--paper);padding:3px 9px;border-radius:999px}
+.area-row .badge{position:absolute;right:10px;top:-9px}
+
+/* area detail */
+.bignum{font-family:var(--display);font-style:italic;font-size:4.6rem;line-height:.8;letter-spacing:-.03em}
+.group{font-family:var(--display);font-style:italic;font-size:1rem;color:var(--muted)}
+.ticks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ticks li{display:flex;gap:10px;align-items:center;font-size:.95rem;padding:10px 14px;border-radius:12px;background:var(--paper);border:1px solid var(--line)}
+.ticks li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c,var(--terra));flex:none}
+.ticks li.check::before{content:"✓";width:auto;height:auto;background:none;color:var(--c,var(--terra));font-weight:600}
+.pill{align-self:flex-start;font-weight:600;font-size:.9rem;padding:8px 14px;border-radius:999px;background:var(--sage-card);color:var(--forest)}
+.note{border-left:2px solid var(--line);padding-left:12px}
+
+/* orbit */
+.orbit{position:relative;width:210px;height:210px;align-self:center;margin-block:6px}
+.orbit .ring{position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(245,239,227,.35)}
+.orbit .core{position:absolute;left:50%;top:50%;width:118px;height:118px;transform:translate(-50%,-50%);border-radius:50%;background:var(--sand);color:var(--terra-deep);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 0 0 10px rgba(245,239,227,.12)}
+.orbit .core b{font-family:var(--display);font-style:italic;font-weight:400;font-size:1.9rem;line-height:1}
+.orbit .core span{font-size:.72rem;font-weight:600}
+.orbit .core small{font-size:.62rem;opacity:.8}
+.orbit .sat{position:absolute;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;border:1px dashed rgba(245,239,227,.55);display:grid;place-items:center;font-family:var(--display);font-style:italic;font-size:.78rem;color:rgba(245,239,227,.85);background:var(--terra-deep)}
+
+/* program list */
+.program{display:flex;flex-direction:column}
+.program li{list-style:none;display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid rgba(245,239,227,.22)}
+.program li:last-child{border-bottom:1px solid rgba(245,239,227,.22)}
+.program{margin:0;padding:0}
+.program .k{font-family:var(--display);font-style:italic;color:var(--sand);width:14px;flex:none}
+.program .t{flex:1;font-family:var(--display);font-size:1.08rem;line-height:1.2;min-width:0}
+.chip{flex:none;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--sand);color:var(--terra-deep);padding:4px 9px;border-radius:999px;white-space:nowrap}
+.next-note{font-family:var(--display);font-style:italic;color:var(--sand);font-size:1.02rem}
+
+/* espacio */
+.kind{display:flex;align-items:center;gap:10px}
+.kind .dotc{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0;padding:14px 16px;border-radius:14px;background:var(--paper);border:1px solid var(--line);font-size:.9rem}
+.meta dt{color:var(--muted)}
+.meta dd{margin:0;font-weight:500}
+
+/* month */
+.stat{display:flex;align-items:baseline;gap:10px}
+.stat b{font-family:var(--display);font-weight:400;font-size:2.8rem;color:var(--terra);line-height:1}
+.stat span{font-size:.88rem;color:var(--muted)}
+.weeks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.week{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.week h4{margin:0 0 2px;font-family:var(--display);font-style:italic;font-weight:400;font-size:.95rem;color:var(--muted)}
+.ev{border-radius:9px;padding:7px 9px;font-size:.74rem;line-height:1.25;color:var(--paper)}
+.ev small{display:block;opacity:.8;font-size:.66rem}
+.ev.prof{background:var(--terra)}
+.ev.prov{background:var(--sage)}
+.ev.cov{background:var(--mustard-card);color:#5E4A1C}
+.ev.grab{background:var(--plum)}
+.indiv{border:1.5px dashed var(--terra);border-radius:14px;padding:11px 14px}
+.indiv b{font-family:var(--display);font-weight:500;font-size:1.02rem;display:block}
+.indiv span{font-size:.82rem;color:var(--muted)}
+.strong-terra{color:var(--terra);font-weight:600}
+
+/* recordings */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.tile{border-radius:16px;padding:13px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tile.glass{background:rgba(245,239,227,.08);border:1px solid rgba(245,239,227,.18)}
+.tile.solid{background:var(--sand);color:var(--ink)}
+.tile svg{width:30px;height:30px}
+.tile b{font-family:var(--display);font-weight:500;font-size:1.02rem;line-height:1.15}
+.tile span{font-size:.78rem;line-height:1.35;opacity:.8}
+
+/* audiences */
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.list li{padding:11px 0;border-top:1px solid var(--line);font-size:1rem;display:flex;gap:12px;align-items:flex-start}
+.list li:last-child{border-bottom:1px solid var(--line)}
+.list li::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;margin-top:.55em;background:var(--c,var(--terra))}
+
+/* cta */
+.cta{align-self:flex-start;display:inline-block;font-family:var(--display);font-size:1.3rem;color:var(--paper);background:var(--terra);padding:12px 26px;border-radius:999px;text-decoration:none}
+.cta:focus-visible,.restart:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.restart{align-self:flex-start;font:inherit;font-size:.85rem;color:var(--muted);background:none;border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="stage">
+<div class="deck" id="deck" aria-roledescription="presentación">
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- 1 cover -->
+  <section class="slide" aria-label="Portada">
+    <div class="rings cover-rings">
+      <span style="width:100%;height:100%;border:1px solid #E7C98F"></span>
+      <span style="width:84%;height:84%;border:1px solid #C9CDB8"></span>
+      <span style="width:68%;height:68%;border:1.5px solid #A3AC92"></span>
+      <span style="width:52%;height:52%;border:1px solid #D9A58C"></span>
+      <span style="width:40%;height:40%;border:1.5px solid #C97E62"></span>
+      <span style="width:28%;height:28%;background:var(--terra)"></span>
+    </div>
+    <span class="dot" style="width:18px;height:18px;background:var(--sage);top:212px;right:28px"></span>
+    <span class="dot" style="width:9px;height:9px;background:var(--plum);top:96px;left:110px"></span>
+    <span class="dot" style="width:14px;height:14px;background:var(--mustard);top:286px;right:142px"></span>
+    <div class="body bottom">
+      <p class="eyebrow">Presentación · Propuesta inicial</p>
+      <h1>Campo<br><em>Somático</em></h1>
+      <p class="text" style="font-size:1.08rem">Formación continua, comunidad e impacto social en terapia somática.</p>
+      <p class="tagline">Un lugar para practicar acompañado.</p>
+      <div class="cover-meta"><b>camposomatico.org</b><span>Octubre 2026</span></div>
+      <div class="hint"><i>→</i>Toca la pantalla para avanzar</div>
+    </div>
+  </section>
+
+  <!-- 2 why -->
+  <section class="slide" aria-label="Por qué existimos">
+    <div class="body">
+      <p class="eyebrow">Por qué existimos</p>
+      <h2>Este oficio se sigue aprendiendo <em>con otros</em></h2>
+      <p class="lead">Quien trabaja con el cuerpo sabe que la formación no termina el día que te entregan el certificado.</p>
+      <p class="text">Se aprende en cada sesión, con cada duda que aparece y con la mirada de colegas que ven lo que a uno se le escapa. Y muchas veces, terminada la formación, esa mirada falta.</p>
+    </div>
+  </section>
+
+  <!-- 3 pillars -->
+  <section class="slide" aria-label="Tres pilares">
+    <div class="body">
+      <p class="eyebrow">Por qué existimos</p>
+      <p class="text">Campo Somático nace para ofrecer ese lugar: un centro iberoamericano de terapia somática donde terapeutas, estudiantes y curiosos puedan seguir formándose en comunidad, con el impacto social como parte del proyecto desde el principio.</p>
+      <div class="pillars">
+        <div class="pillar" style="background:var(--peach-card)"><span class="n" style="background:var(--terra)">1</span><div><h3>Formación continua</h3><p>Seguir aprendiendo después de la formación, con profesores y colegas con experiencia.</p></div></div>
+        <div class="pillar" style="background:var(--sage-card)"><span class="n" style="background:var(--forest)">2</span><div><h3>Comunidad</h3><p>Un grupo estable con quien pensar los casos, compartir dudas y sostener la práctica.</p></div></div>
+        <div class="pillar" style="background:var(--mustard-card)"><span class="n" style="background:var(--mustard)">3</span><div><h3>Impacto social</h3><p>Que la terapia somática llegue también a quienes hoy no pueden pagarla.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 six areas -->
+  <section class="slide" aria-label="Seis áreas">
+    <div class="body">
+      <p class="eyebrow">El proyecto completo</p>
+      <h2>Seis áreas, <em>un mismo campo</em></h2>
+      <p class="text" style="font-size:.92rem">Cada área se apoya en las demás. La formación alimenta la práctica, la práctica se cuida con supervisión y lo que construimos juntos vuelve a la comunidad.</p>
+      <div class="areas">
+        <div class="area-row"><span class="k">01</span><div><b>Formación profesional</b><small>Charlas, talleres y certificaciones</small></div></div>
+        <div class="area-row"><span class="k">02</span><div><b>Directorio Somático</b><small>Encontrar terapeuta, gratis</small></div></div>
+        <div class="area-row"><span class="k">03</span><div><b>Acción social</b><small>Sesiones para personas con pocos recursos</small></div></div>
+        <div class="area-row"><span class="k">04</span><div><b>Equipo terapéutico</b><small>Un equipo que atiende con supervisión</small></div></div>
+        <div class="area-row first"><span class="badge">Primer paso</span><span class="k">05</span><div><b>Supervisiones y covisiones</b><small>Revisar la práctica acompañados</small></div></div>
+        <div class="area-row"><span class="k">06</span><div><b>Club de lectura</b><small>Leer juntos y conversar</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 area 01 -->
+  <section class="slide" aria-label="Área 01">
+    <div class="body">
+      <p class="eyebrow">Las áreas · Aprender, encontrarse y dar</p>
+      <span class="bignum" style="color:var(--terra)">01</span>
+      <h2>Formación profesional</h2>
+      <p class="text">Clases de profesores, de colegas con experiencia y de escuelas de referencia internacional, en distintos formatos.</p>
+      <ul class="ticks">
+        <li>Charlas abiertas y gratuitas</li>
+        <li>Talleres incluidos en la membresía</li>
+        <li>Certificaciones (aparte)</li>
+      </ul>
+      <p class="small note">Lo que imaginamos para Campo Somático a medida que crezca. Algunas áreas arrancan ya; otras se irán sumando.</p>
+    </div>
+  </section>
+
+  <!-- 6 area 02 -->
+  <section class="slide" aria-label="Área 02">
+    <div class="body">
+      <p class="eyebrow">Las áreas · Aprender, encontrarse y dar</p>
+      <span class="bignum" style="color:var(--forest)">02</span>
+      <h2>Directorio Somático</h2>
+      <p class="text">Un directorio gratuito para que cualquier persona pueda encontrar un terapeuta somático, en su ciudad o en línea.</p>
+      <p class="text">Para los terapeutas es una forma sencilla de ser encontrados y de estar cerca de la comunidad.</p>
+      <span class="pill">directoriosomatico.org</span>
+    </div>
+  </section>
+
+  <!-- 7 area 03 -->
+  <section class="slide" aria-label="Área 03">
+    <div class="body">
+      <p class="eyebrow">Las áreas · Aprender, encontrarse y dar</p>
+      <span class="bignum" style="color:var(--mustard)">03</span>
+      <h2>Acción social</h2>
+      <p class="text">Equipos especializados ofrecen sesiones, en línea y presenciales, a personas con pocos recursos.</p>
+      <p class="text">Campo Somático paga los honorarios de cada sesión y acompaña a quienes atienden con supervisión.</p>
+      <p class="quote">Nadie trabaja gratis y nadie trabaja solo.</p>
+    </div>
+  </section>
+
+  <!-- 8 area 04 -->
+  <section class="slide" aria-label="Área 04">
+    <div class="body">
+      <p class="eyebrow">Las áreas · Atender, cuidar y leer</p>
+      <span class="bignum" style="color:var(--plum)">04</span>
+      <h2>Equipo terapéutico</h2>
+      <p class="text">Un grupo seleccionado de terapeutas atiende bajo el nombre de Campo Somático, con supervisión semanal para cuidar cada proceso.</p>
+      <p class="text">Es distinto del directorio: aquí hay un equipo y un modo de trabajar compartido.</p>
+      <p class="quote">Supervisión semanal para todo el equipo.</p>
+    </div>
+  </section>
+
+  <!-- 9 area 05 -->
+  <section class="slide" aria-label="Área 05">
+    <div class="body">
+      <p class="eyebrow">Las áreas · Atender, cuidar y leer</p>
+      <div style="display:flex;align-items:flex-end;gap:12px"><span class="bignum" style="color:var(--terra)">05</span><span class="badge" style="margin-bottom:6px">Primer paso</span></div>
+      <h2>Supervisiones y covisiones</h2>
+      <p class="text">Revisar casos con profesores, con proveedores habilitados y entre pares. Es lo que más sostiene la práctica clínica en el día a día.</p>
+      <ul class="ticks">
+        <li class="check">Con profesores</li>
+        <li class="check">Con proveedores habilitados</li>
+        <li class="check">Entre pares</li>
+      </ul>
+      <p class="small note">La supervisión atraviesa todo el proyecto: por eso es el área con la que empezamos.</p>
+    </div>
+  </section>
+
+  <!-- 10 area 06 -->
+  <section class="slide" aria-label="Área 06">
+    <div class="body">
+      <p class="eyebrow">Las áreas · Atender, cuidar y leer</p>
+      <span class="bignum" style="color:var(--forest)">06</span>
+      <h2>Club de lectura</h2>
+      <p class="text">Grupos con una persona que facilita, para leer juntos libros de terapia somática y conversar sobre lo leído desde la propia práctica.</p>
+      <p class="quote">Un libro se entiende distinto cuando lo lees en grupo.</p>
+    </div>
+  </section>
+
+  <!-- 11 grow -->
+  <section class="slide terra" data-tone="dark" aria-label="Cómo vamos a crecer">
+    <div class="body">
+      <p class="eyebrow">Cómo vamos a crecer</p>
+      <h2>De a poco, <em>área por área</em></h2>
+      <div class="orbit">
+        <div class="ring"></div>
+        <span class="sat" style="left:50%;top:0%">01</span>
+        <span class="sat" style="left:97.5%;top:34.5%">02</span>
+        <span class="sat" style="left:79.4%;top:90.5%">03</span>
+        <span class="sat" style="left:20.6%;top:90.5%">04</span>
+        <span class="sat" style="left:2.5%;top:34.5%">06</span>
+        <div class="core"><b>05</b><span>Supervisiones</span><small>empezamos aquí</small></div>
+      </div>
+      <p class="text">Vamos a construir Campo Somático de a poco y, con el tiempo, cubrir las seis áreas. Al inicio empezamos por una: <strong style="color:var(--sand)">las supervisiones</strong>, porque es donde más se nota la falta de compañía.</p>
+      <p class="small">Las otras cinco áreas se irán sumando con el tiempo: formación, directorio, acción social, equipo terapéutico y club de lectura.</p>
+    </div>
+  </section>
+
+  <!-- 12 program -->
+  <section class="slide terra" data-tone="dark" aria-label="Programa de supervisión">
+    <div class="body">
+      <p class="eyebrow">Al inicio: el programa de supervisión</p>
+      <h2>Cinco espacios <em>a lo largo del mes</em></h2>
+      <p class="text">Se combinan para que nadie sostenga sus casos en soledad.</p>
+      <ul class="program">
+        <li><span class="k">1</span><span class="t">Supervisión grupal con profesores</span><span class="chip">2 al mes</span></li>
+        <li><span class="k">2</span><span class="t">Supervisión grupal con proveedores</span><span class="chip">2 al mes</span></li>
+        <li><span class="k">3</span><span class="t">Covisión entre pares</span><span class="chip">1 al mes</span></li>
+        <li><span class="k">4</span><span class="t">Supervisión con grabación</span><span class="chip">1 al mes</span></li>
+        <li><span class="k">5</span><span class="t">Supervisión individual con proveedores</span><span class="chip">Con descuento</span></li>
+      </ul>
+      <p class="next-note">En las pantallas que siguen, cada espacio en detalle →</p>
+    </div>
+  </section>
+
+  <!-- 13 espacio 1 -->
+  <section class="slide" aria-label="Espacio 1">
+    <div class="body">
+      <div class="kind" style="--c:var(--terra)"><span class="dotc"></span><p class="eyebrow">Los espacios · 1 · Grupal</p></div>
+      <h2>Supervisión con profesores</h2>
+      <p class="text">Un grupo pequeño trae sus casos y los mira junto a un profesor. Un espacio para ordenar lo que pasa en sesión, despejar dudas y ganar confianza en lo que haces.</p>
+      <p class="quote">La mirada de quien enseña.</p>
+      <dl class="meta"><dt>Quién guía</dt><dd>Un profesor</dd><dt>Ritmo</dt><dd>2 encuentros al mes</dd></dl>
+    </div>
+  </section>
+
+  <!-- 14 espacio 2 -->
+  <section class="slide" aria-label="Espacio 2">
+    <div class="body">
+      <div class="kind" style="--c:var(--sage)"><span class="dotc"></span><p class="eyebrow">Los espacios · 2 · Grupal</p></div>
+      <h2>Supervisión con proveedores</h2>
+      <p class="text">La misma dinámica, guiada por proveedores habilitados: terapeutas con muchos años de práctica y habilitación para acompañar a otros. Una mirada cercana y muy concreta.</p>
+      <p class="quote">La mirada de quien está en consulta todos los días.</p>
+      <dl class="meta"><dt>Quién guía</dt><dd>Un proveedor habilitado</dd><dt>Ritmo</dt><dd>2 encuentros al mes</dd></dl>
+    </div>
+  </section>
+
+  <!-- 15 espacio 3 -->
+  <section class="slide" aria-label="Espacio 3">
+    <div class="body">
+      <div class="kind" style="--c:var(--mustard)"><span class="dotc"></span><p class="eyebrow">Los espacios · 3 · Entre pares</p></div>
+      <h2>Covisión</h2>
+      <p class="text">Un espacio horizontal para revisar casos entre colegas. No hay profesor: el grupo conversa y cada quien aporta lo que ve. Puede haber un proveedor que coordine, pero la conversación es de todos.</p>
+      <p class="quote">La mirada de los pares.</p>
+      <dl class="meta"><dt>Quién guía</dt><dd>El grupo</dd><dt>Coordinación</dt><dd>Opcional, un proveedor</dd></dl>
+    </div>
+  </section>
+
+  <!-- 16 espacio 4 -->
+  <section class="slide" aria-label="Espacio 4">
+    <div class="body">
+      <div class="kind" style="--c:var(--plum)"><span class="dotc"></span><p class="eyebrow">Los espacios · 4 · Grupal, con sesión grabada</p></div>
+      <h2>Supervisión con grabación</h2>
+      <p class="text">Una persona trae una sesión grabada y la miramos juntos, pausando donde haga falta para comentar. Se trabajan una o dos sesiones por encuentro, así hay tiempo para detenerse en los detalles.</p>
+      <p class="quote">Pocas cosas enseñan tanto como verse trabajar.</p>
+      <dl class="meta"><dt>Quién guía</dt><dd>Un profesor o un proveedor</dd><dt>Ritmo</dt><dd>1 encuentro al mes</dd><dt>Grabaciones</dt><dd>Siempre con consentimiento del consultante</dd></dl>
+    </div>
+  </section>
+
+  <!-- 17 espacio 5 -->
+  <section class="slide" aria-label="Espacio 5">
+    <div class="body">
+      <div class="kind" style="--c:var(--forest)"><span class="dotc"></span><p class="eyebrow">Los espacios · 5 · Individual</p></div>
+      <h2>Supervisión individual con proveedores</h2>
+      <p class="text">Cuando un caso necesita más tiempo o más intimidad, puedes reservar una supervisión individual con un proveedor habilitado, a un precio preferencial por ser parte de Campo Somático.</p>
+      <p class="quote">Un espacio a tu medida.</p>
+      <dl class="meta"><dt>Quién guía</dt><dd>Un proveedor habilitado</dd><dt>Ritmo</dt><dd>Cuando lo necesites</dd><dt>Precio</dt><dd>Con descuento para miembros</dd></dl>
+    </div>
+  </section>
+
+  <!-- 18 month -->
+  <section class="slide" aria-label="Un mes en Campo Somático">
+    <div class="body">
+      <p class="eyebrow">Cómo se vive</p>
+      <h2>Un mes en <em>Campo Somático</em></h2>
+      <div class="stat"><b>6</b><span>encuentros grupales al mes</span></div>
+      <div class="weeks">
+        <div class="week"><h4>Semana 1</h4><div class="ev prof">Supervisión con profesor<small>Grupal</small></div><div class="ev cov">Covisión<small>Entre pares</small></div></div>
+        <div class="week"><h4>Semana 2</h4><div class="ev prov">Supervisión con proveedor<small>Grupal</small></div><div class="ev grab">Supervisión con grabación<small>Una o dos sesiones</small></div></div>
+        <div class="week"><h4>Semana 3</h4><div class="ev prof">Supervisión con profesor<small>Grupal</small></div></div>
+        <div class="week"><h4>Semana 4</h4><div class="ev prov">Supervisión con proveedor<small>Grupal</small></div></div>
+      </div>
+      <div class="indiv"><b>Y cuando lo necesites: supervisión individual</b><span>Con un proveedor habilitado, con descuento para miembros</span></div>
+      <p class="small">Calendario orientativo. Las fechas y horarios los acordamos con cada grupo. <span class="strong-terra">Todos los encuentros quedan grabados.</span></p>
+    </div>
+  </section>
+
+  <!-- 19 recordings -->
+  <section class="slide forest" data-tone="dark" aria-label="Todo queda grabado">
+    <div class="body">
+      <p class="eyebrow">Siempre a mano</p>
+      <h2>Todo queda <em>grabado</em></h2>
+      <p class="text">Cada encuentro queda disponible para que lo veas cuando quieras. Si un día no puedes ir, o quieres volver sobre algo que se dijo, está ahí esperándote.</p>
+      <div class="tiles">
+        <div class="tile glass"><svg viewBox="0 0 32 32" fill="none" stroke="#F2E2C0" stroke-width="1.6" stroke-linecap="round"><rect x="6" y="8" width="20" height="13" rx="2"/><path d="M3 25h26"/></svg><b>En la computadora</b><span>Desde el navegador, con todo el material ordenado.</span></div>
+        <div class="tile glass"><svg viewBox="0 0 32 32" fill="none" stroke="#F2E2C0" stroke-width="1.6" stroke-linecap="round"><rect x="10" y="3" width="12" height="26" rx="2.5"/><path d="M15 25h2"/></svg><b>En la app del celular</b><span>Para llevarlo contigo a donde vayas.</span></div>
+        <div class="tile solid"><svg viewBox="0 0 32 32" fill="none" stroke="#8B3F2A" stroke-width="1.6"><circle cx="16" cy="16" r="12"/><path d="M13 10.5v11l9-5.5z" fill="#8B3F2A" stroke="none"/></svg><b>Con video</b><span>Para ver el encuentro completo, como si estuvieras ahí.</span></div>
+        <div class="tile solid"><svg viewBox="0 0 32 32" fill="none" stroke="#8B3F2A" stroke-width="1.6" stroke-linecap="round"><path d="M6 19v-3a10 10 0 0 1 20 0v3"/><rect x="5" y="18" width="5" height="8" rx="2"/><rect x="22" y="18" width="5" height="8" rx="2"/></svg><b>Solo con audio</b><span>Para escucharlo mientras caminas, viajas o cocinas.</span></div>
+      </div>
+      <p class="small">Las grabaciones son solo para la comunidad de Campo Somático y se comparten cuidando la confidencialidad de los consultantes.</p>
+    </div>
+  </section>
+
+  <!-- 20 for whom -->
+  <section class="slide" aria-label="Para quiénes">
+    <div class="body">
+      <p class="eyebrow">Para quiénes</p>
+      <h2>Si trabajas con el cuerpo, <em>aquí hay lugar</em></h2>
+      <p class="eyebrow" style="color:var(--muted);margin-top:4px">Pensado para</p>
+      <ul class="list">
+        <li style="--c:var(--terra)">Terapeutas somáticos ya formados que quieren seguir creciendo</li>
+        <li style="--c:var(--sage)">Estudiantes en formación que buscan acompañamiento con sus primeros casos</li>
+        <li style="--c:var(--mustard)">Profesionales de la salud que integran el cuerpo en su trabajo</li>
+        <li style="--c:var(--plum)">Curiosos de la terapia somática</li>
+        <li style="--c:var(--forest)">Colegas de toda Iberoamérica, porque los encuentros son en línea</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 21 takeaways -->
+  <section class="slide" aria-label="Lo que te llevas">
+    <div class="body">
+      <p class="eyebrow">Para quiénes</p>
+      <h2>Lo que <em>te llevas</em></h2>
+      <ul class="list">
+        <li>Más claridad y tranquilidad con tus casos</li>
+        <li>Un grupo estable de colegas con quienes pensar en voz alta</li>
+        <li>La mirada de profesores y proveedores con experiencia</li>
+        <li>Un ritmo que sostiene tu práctica mes a mes</li>
+        <li>Todas las grabaciones, para volver a ellas cuando quieras</li>
+      </ul>
+      <p class="quote">Cuidar a quien cuida también es parte del trabajo.</p>
+    </div>
+  </section>
+
+  <!-- 22 cta -->
+  <section class="slide" aria-label="Te invitamos">
+    <div class="rings end-rings">
+      <span style="width:100%;height:100%;border:1px solid #EAD9B0"></span>
+      <span style="width:84%;height:84%;border:1px solid #E3BCA8"></span>
+      <span style="width:68%;height:68%;border:1.5px solid #D49A80"></span>
+      <span style="width:52%;height:52%;border:1px solid #C3C9B3"></span>
+      <span style="width:38%;height:38%;border:1.5px solid #A3AC92"></span>
+      <span style="width:26%;height:26%;background:var(--sage)"></span>
+    </div>
+    <span class="dot" style="width:16px;height:16px;background:var(--mustard);top:74px;right:150px"></span>
+    <span class="dot" style="width:11px;height:11px;background:var(--terra);top:236px;right:120px"></span>
+    <div class="body bottom">
+      <p class="eyebrow">Te invitamos</p>
+      <h2 style="font-size:clamp(2.4rem,11vw,3rem)">¿Te sumas desde <em>el comienzo?</em></h2>
+      <p class="text">Esta es una propuesta inicial y la queremos terminar de dar forma con las personas que se sumen primero. Si te interesa, escríbenos: nos encantará conversar, escuchar lo que necesitas y contarte los detalles de la membresía.</p>
+      <a class="cta" href="https://camposomatico.org" target="_blank" rel="noopener">camposomatico.org</a>
+      <p class="small">Y si conoces a alguien a quien le pueda servir, compártelo.</p>
+      <button class="restart" id="restart" type="button">↺ Volver al inicio</button>
+    </div>
+  </section>
+</div>
+</div>
+
+<script>
+(function(){
+  var deck=document.getElementById('deck');
+  var slides=[].slice.call(deck.querySelectorAll('.slide'));
+  var prog=document.getElementById('progress');
+  var total=slides.length, cur=0;
+  function pad(n){return (n<10?'0':'')+n}
+  slides.forEach(function(s,i){
+    var seg=document.createElement('span');seg.appendChild(document.createElement('i'));prog.appendChild(seg);
+    if(i>0){
+      var f=document.createElement('div');f.className='foot';
+      f.innerHTML='<span class="brand">Campo Somático</span><span class="num">'+pad(i+1)+' / '+total+'</span>';
+      s.appendChild(f);
+    }
+  });
+  var segs=[].slice.call(prog.children);
+  function go(i){
+    if(i<0||i>=total)return;
+    slides[cur].classList.remove('active');
+    cur=i;
+    var s=slides[cur];
+    s.classList.add('active');s.scrollTop=0;
+    deck.classList.toggle('dark',s.getAttribute('data-tone')==='dark');
+    segs.forEach(function(g,k){g.classList.toggle('done',k<=cur)});
+  }
+  go(0);
+  var swiped=false;
+  deck.addEventListener('click',function(e){
+    if(swiped){swiped=false;return}
+    if(e.target.closest('a,button'))return;
+    var r=deck.getBoundingClientRect();
+    if(e.clientX-r.left<r.width*0.28)go(cur-1);else go(cur+1);
+  });
+  var sx=0,sy=0;
+  deck.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY},{passive:true});
+  deck.addEventListener('touchend',function(e){
+    var t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.3){swiped=true;go(dx<0?cur+1:cur-1);setTimeout(function(){swiped=false},400)}
+  },{passive:true});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  document.getElementById('restart').addEventListener('click',function(){go(0)});
+})();
+</script>
+</body>
+</html>
