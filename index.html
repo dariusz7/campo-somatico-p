@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-<title>v7 Campo Somático Mobile</title>
+<title>v8 Campo Somático Mobile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Figtree:wght@400;500;600&display=swap">
@@ -171,7 +171,11 @@ p{margin:0}
 .tile{border-radius:16px;padding:11px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .tile.glass{background:rgba(245,239,227,.08);border:1px solid rgba(245,239,227,.18)}
 .tile.solid{background:var(--sand);color:var(--ink)}
-.tile svg{width:26px;height:26px}
+.tile svg{width:26px;height:26px;flex:none}
+.tile.app{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px;padding:14px}
+.tile.app svg{width:34px;height:34px}
+.tile.app div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tile.app b{font-size:1.15rem}
 .tile b{font-family:var(--display);font-weight:500;font-size:1.02rem;line-height:1.15}
 .tile span{font-size:.85rem;line-height:1.35;opacity:.8}
 
@@ -240,7 +244,7 @@ p{margin:0}
   <section class="slide" aria-label="Tres pilares">
     <div class="body">
       <p class="eyebrow">Por qué existimos</p>
-      <p class="text">Campo Somático nace para ofrecer ese lugar: un centro iberoamericano de terapia somática donde terapeutas, estudiantes y curiosos puedan seguir formándose en comunidad, con el impacto social como parte del proyecto desde el principio.</p>
+      <p class="text">Campo Somático es un centro iberoamericano de terapia somática donde terapeutas, estudiantes y curiosos sigan formándose en comunidad.</p>
       <div class="pillars">
         <div class="pillar" style="background:var(--peach-card)"><span class="n" style="background:var(--terra)">1</span><div><h3>Formación continua</h3><p>Seguir aprendiendo después de la formación, con profesores y colegas con experiencia.</p></div></div>
         <div class="pillar" style="background:var(--sage-card)"><span class="n" style="background:var(--forest)">2</span><div><h3>Comunidad</h3><p>Un grupo estable con quien pensar los casos, compartir dudas y sostener la práctica.</p></div></div>
@@ -272,7 +276,6 @@ p{margin:0}
         <li><span class="k">3</span><span class="t">Covisiones entre pares</span><span class="chip">1 al mes</span></li>
         <li><span class="k">4</span><span class="t">Supervisión con grabación</span><span class="chip">1 al mes</span></li>
       </ul>
-      <p class="next-note">En las pantallas que siguen, cada espacio en detalle →</p>
     </div>
   </section>
 
@@ -332,23 +335,22 @@ p{margin:0}
         <div class="week"><h4>Semana 3</h4><div class="ev prof">Supervisión con profesor<small>Grupal</small></div></div>
         <div class="week"><h4>Semana 4</h4><div class="ev prov">Supervisión con proveedor<small>Grupal</small></div></div>
       </div>
-      <p class="small">Calendario orientativo. Las fechas y horarios los acordamos con cada grupo. <span class="strong-terra">Todos los encuentros quedan grabados.</span></p>
+      <p class="small"><span class="strong-terra">Todos los encuentros quedan grabados en la app.</span></p>
     </div>
   </section>
 
   <!-- 19 recordings -->
-  <section class="slide forest" data-tone="dark" aria-label="Todo queda grabado">
+  <section class="slide forest" data-tone="dark" aria-label="App Campo Somático">
     <div class="body">
       <p class="eyebrow">Siempre a mano</p>
-      <h2>Todo queda <em>grabado</em></h2>
-      <p class="text">Cada encuentro queda disponible para que lo veas cuando quieras. Si un día no puedes ir, o quieres volver sobre algo que se dijo, está ahí esperándote.</p>
+      <h2>La app de <em>Campo Somático</em></h2>
+      <p class="text">Todo el programa en tu celular. Mira las grabaciones de cada encuentro cuando quieras y desde donde estés. Si un día no puedes ir, o quieres volver sobre algo que se dijo, está ahí esperándote.</p>
       <div class="tiles">
-        <div class="tile glass"><svg viewBox="0 0 32 32" fill="none" stroke="#F2E2C0" stroke-width="1.6" stroke-linecap="round"><rect x="6" y="8" width="20" height="13" rx="2"/><path d="M3 25h26"/></svg><b>En la computadora</b><span>Desde el navegador, con todo el material ordenado.</span></div>
-        <div class="tile glass"><svg viewBox="0 0 32 32" fill="none" stroke="#F2E2C0" stroke-width="1.6" stroke-linecap="round"><rect x="10" y="3" width="12" height="26" rx="2.5"/><path d="M15 25h2"/></svg><b>En la app del celular</b><span>Para llevarlo contigo a donde vayas.</span></div>
-        <div class="tile solid"><svg viewBox="0 0 32 32" fill="none" stroke="#8B3F2A" stroke-width="1.6"><circle cx="16" cy="16" r="12"/><path d="M13 10.5v11l9-5.5z" fill="#8B3F2A" stroke="none"/></svg><b>Con video</b><span>Para ver el encuentro completo, como si estuvieras ahí.</span></div>
-        <div class="tile solid"><svg viewBox="0 0 32 32" fill="none" stroke="#8B3F2A" stroke-width="1.6" stroke-linecap="round"><path d="M6 19v-3a10 10 0 0 1 20 0v3"/><rect x="5" y="18" width="5" height="8" rx="2"/><rect x="22" y="18" width="5" height="8" rx="2"/></svg><b>Solo con audio</b><span>Para escucharlo mientras caminas, viajas o cocinas.</span></div>
+        <div class="tile solid app"><svg viewBox="0 0 32 32" fill="none" stroke="#8B3F2A" stroke-width="1.6" stroke-linecap="round"><rect x="10" y="3" width="12" height="26" rx="2.5"/><path d="M15 25h2"/></svg><div><b>Todo desde la app</b><span>Todos los encuentros grabados, en tu bolsillo, para llevarlos a donde vayas.</span></div></div>
+        <div class="tile glass"><svg viewBox="0 0 32 32" fill="none" stroke="#F2E2C0" stroke-width="1.6"><circle cx="16" cy="16" r="12"/><path d="M13 10.5v11l9-5.5z" fill="#F2E2C0" stroke="none"/></svg><b>Con video</b><span>Para ver el encuentro completo, como si estuvieras ahí.</span></div>
+        <div class="tile glass"><svg viewBox="0 0 32 32" fill="none" stroke="#F2E2C0" stroke-width="1.6" stroke-linecap="round"><path d="M6 19v-3a10 10 0 0 1 20 0v3"/><rect x="5" y="18" width="5" height="8" rx="2"/><rect x="22" y="18" width="5" height="8" rx="2"/></svg><b>Solo con audio</b><span>Para escucharlo mientras caminas, viajas o cocinas.</span></div>
       </div>
-      <p class="small">Las grabaciones son solo para la comunidad de Campo Somático y se comparten cuidando la confidencialidad de los consultantes.</p>
+      <p class="small">También disponible desde la computadora.</p>
     </div>
   </section>
 
