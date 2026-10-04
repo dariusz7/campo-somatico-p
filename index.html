@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-<title>v6 Campo Somático Mobile</title>
+<title>v7 Campo Somático Mobile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Figtree:wght@400;500;600&display=swap">
@@ -73,9 +73,9 @@ h1 em,h2 em{font-style:italic;color:var(--terra)}
 .terra h2 em,.forest h2 em{color:var(--sand)}
 p{margin:0}
 .lead{font-family:var(--display);font-size:clamp(1.1rem,2.9vh,1.28rem);line-height:1.35;font-weight:500}
-.text{color:var(--muted);font-size:1rem;max-width:34em}
+.text{color:var(--muted);font-size:1.06rem;max-width:34em}
 .terra .text,.forest .text{color:rgba(245,239,227,.85)}
-.small{font-size:.85rem;color:var(--muted)}
+.small{font-size:.9rem;color:var(--muted)}
 .terra .small,.forest .small{color:rgba(245,239,227,.72)}
 .quote{font-family:var(--display);font-style:italic;font-size:1.2rem;line-height:1.3;color:var(--forest)}
 .tagline{font-family:var(--display);font-style:italic;font-weight:500;font-size:1.3rem;color:var(--forest)}
@@ -100,7 +100,7 @@ p{margin:0}
 .pillar{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:16px}
 .pillar .n{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--paper);font-family:var(--display);font-size:1rem}
 .pillar h3{font-size:1.15rem;margin-bottom:2px}
-.pillar p{font-size:.88rem;color:var(--muted);line-height:1.4}
+.pillar p{font-size:.95rem;color:var(--muted);line-height:1.4}
 
 /* areas overview */
 .areas{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
@@ -155,7 +155,7 @@ p{margin:0}
 .weeks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .week{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .week h4{margin:0 0 2px;font-family:var(--display);font-style:italic;font-weight:400;font-size:.95rem;color:var(--muted)}
-.ev{border-radius:9px;padding:7px 9px;font-size:.74rem;line-height:1.25;color:var(--paper)}
+.ev{border-radius:9px;padding:7px 9px;font-size:.8rem;line-height:1.25;color:var(--paper)}
 .ev small{display:block;opacity:.8;font-size:.66rem}
 .ev.prof{background:var(--terra)}
 .ev.prov{background:var(--sage)}
@@ -173,7 +173,7 @@ p{margin:0}
 .tile.solid{background:var(--sand);color:var(--ink)}
 .tile svg{width:26px;height:26px}
 .tile b{font-family:var(--display);font-weight:500;font-size:1.02rem;line-height:1.15}
-.tile span{font-size:.78rem;line-height:1.35;opacity:.8}
+.tile span{font-size:.85rem;line-height:1.35;opacity:.8}
 
 /* audiences */
 .list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
@@ -204,7 +204,7 @@ p{margin:0}
   <div class="progress" id="progress" aria-hidden="true"></div>
 
   <!-- 1 cover -->
-  <section class="slide" aria-label="Portada">
+  <section class="slide" data-nogrow aria-label="Portada">
     <div class="rings cover-rings">
       <span style="width:100%;height:100%;border:1px solid #E7C98F"></span>
       <span style="width:84%;height:84%;border:1px solid #C9CDB8"></span>
@@ -408,7 +408,7 @@ p{margin:0}
     <div class="body">
       <p class="eyebrow">El plan a futuro</p>
       <h2>Seis áreas, <em>un mismo campo</em></h2>
-      <p class="text" style="font-size:.92rem">Cada área se apoya en las demás. La formación alimenta la práctica, la práctica se cuida con supervisión y lo que construimos juntos vuelve a la comunidad.</p>
+      <p class="text">Cada área se apoya en las demás. La formación alimenta la práctica, la práctica se cuida con supervisión y lo que construimos juntos vuelve a la comunidad.</p>
       <div class="areas">
         <div class="area-row future"><span class="k">01</span><b>Formación profesional</b></div>
         <div class="area-row future"><span class="k">02</span><b>Directorio Somático</b></div>
@@ -538,10 +538,15 @@ p{margin:0}
     segs.forEach(function(g,k){g.classList.toggle('done',k<=cur)});
     fit(s);
   }
+  function fits(s,b,z){b.style.zoom=z;return s.scrollHeight<=s.clientHeight+1}
   function fit(s){
     var b=s.querySelector('.body');if(!b)return;
-    b.style.zoom='';var z=1;
-    while(s.scrollHeight>s.clientHeight+1&&z>0.7){z=Math.round((z-0.03)*100)/100;b.style.zoom=z}
+    var max=s.hasAttribute('data-nogrow')?1:1.45,min=0.7;
+    if(fits(s,b,max)){b.style.zoom=max;return}
+    var lo=min,hi=max;
+    for(var k=0;k<9;k++){var mid=(lo+hi)/2;if(fits(s,b,mid))lo=mid;else hi=mid}
+    var z=Math.max(min,Math.floor(lo*0.96*100)/100);
+    b.style.zoom=z;
   }
   window.addEventListener('resize',function(){fit(slides[cur])});
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){fit(slides[cur])});
