@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-<title>v23 Campo Somático Mobile</title>
+<title>v25 Campo Somático Mobile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Figtree:wght@400;500;600&display=swap">
@@ -240,6 +240,10 @@ p{margin:0}
 .team{margin:4px 0 0;display:flex;flex-wrap:wrap;justify-content:flex-end;text-align:right;gap:2px 14px;font-size:.78rem;color:var(--muted)}
 .team dt{width:100%;font-size:.64rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
 .team dd{margin:0;width:100%}
+.wishes{display:flex;flex-direction:column;gap:18px}
+.wishes p{font-family:var(--display);font-size:clamp(1.3rem,3.4vh,1.6rem);line-height:1.28;text-wrap:pretty}
+.wishes p+p{padding-top:18px;border-top:1px solid var(--line)}
+.wishes em{font-style:italic;color:var(--terra)}
 </style>
 </head>
 <body>
@@ -264,20 +268,10 @@ p{margin:0}
     <div class="body bottom">
       <p class="eyebrow">Presentación · Propuesta inicial</p>
       <h1>Campo<br><em>Somático</em></h1>
-      <p class="text" style="font-size:1.08rem">Formación continua, comunidad e impacto social en terapia somática.</p>
+      <p class="text" style="font-size:1.08rem">Comunidad y formación continua en terapia somática.</p>
       <p class="tagline">Un lugar para practicar acompañado.</p>
       <div class="cover-meta"><b>camposomatico.org</b></div>
       <div class="hint"><i>→</i>Toca la pantalla para avanzar</div>
-    </div>
-  </section>
-
-  <!-- 2 why -->
-  <section class="slide" aria-label="Por qué existimos">
-    <div class="body">
-      <p class="eyebrow">Por qué existimos</p>
-      <h2>Este oficio se sigue aprendiendo <em>con otros</em></h2>
-      <p class="lead">Quien trabaja con el cuerpo sabe que la formación no termina el día que te entregan el certificado.</p>
-      <p class="text">Se aprende en cada sesión, con cada duda que aparece y con la mirada de colegas que ven lo que a uno se le escapa. Creemos en la formación continua después de recibirse.</p>
     </div>
   </section>
 
@@ -289,13 +283,22 @@ p{margin:0}
     </div>
   </section>
 
+  <section class="slide" aria-label="Nuestro anhelo">
+    <div class="body">
+      <p class="eyebrow">Nuestro anhelo</p>
+      <div class="wishes">
+        <p>Que aprendamos cada vez más sobre la sanación del trauma y que ese conocimiento llegue a <em>cada rincón del mundo.</em></p>
+        <p>Que encontrar apoyo y formación sea más simple. Tanto para quien busca su bienestar como para quien <em>acompaña a otros.</em></p>
+      </div>
+    </div>
+  </section>
+
   <section class="slide" aria-label="Tres pilares">
     <div class="body">
       <p class="eyebrow">Nuestros pilares</p>
       <div class="pillars">
         <div class="pillar" style="background:var(--peach-card)"><span class="n" style="background:var(--terra)">1</span><div><h3>Formación continua</h3><p>Seguir aprendiendo después de la formación, con profesores y colegas con experiencia.</p></div></div>
         <div class="pillar" style="background:var(--sage-card)"><span class="n" style="background:var(--forest)">2</span><div><h3>Comunidad</h3><p>Un grupo estable con quien pensar los casos, compartir dudas y sostener la práctica.</p></div></div>
-        <div class="pillar" style="background:var(--mustard-card)"><span class="n" style="background:var(--mustard)">3</span><div><h3>Impacto social</h3><p>Que la terapia somática llegue también a quienes hoy no pueden pagarla.</p></div></div>
       </div>
     </div>
   </section>
